@@ -1,3 +1,10 @@
+# CellProvider
+
+[![Version](https://img.shields.io/cocoapods/v/CellProvider.svg?style=flat)](http://cocoapods.org/pods/CellProvider)
+[![License](https://img.shields.io/cocoapods/l/CellProvider.svg?style=flat)](http://cocoapods.org/pods/CellProvider)
+[![Language](https://img.shields.io/badge/language-swift_2.2-ff69b4.svg)](http://cocoadocs.org/docsets/CellProvider)
+[![Platform](https://img.shields.io/cocoapods/p/CellProvider.svg?style=flat)](http://cocoapods.org/pods/CellProvider)
+
 <img src="Cells.png" width=375 />
 
 # Generic Cell Providers
@@ -10,7 +17,7 @@ My cell provider implementation ticks off the following:
 * Multiple cell types 
 * Composited approach (the cell code doesn't have to exist inside your VC)
 
-I actually wrote this code a long time ago for another library of mine, [Populate](http://github.com/shaps80/Populate). 
+I actually wrote this code a long time ago for another library of mine, [Populate](http://github.com/shaps80/Populate).
 
 Populate also includes a more consistent API for dealing with data in your table/collection views. Including type-safety, NSFetchedResultsController-like bindings via a simple Swift array, value-types support, sectioning, sorting, and more.
 
@@ -18,33 +25,33 @@ Populate also includes a more consistent API for dealing with data in your table
 
 ```swift
 final class ViewController: UITableViewController, DataCellProviding {
-  
-  override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-    // Note: this is the ONLY time we have to implicitly unwrap
-    return cellProvider(forRowAt: indexPath, in: tableView).cell as! UITableViewCell
-  }
-  
-  func cellProvider<D : DataView>(forRowAt indexPath: NSIndexPath, in dataView: D) -> DataCellProvider {
-    let person = people[indexPath.item]
-    
-    if person.role == "Engineer" {
-      return DataCellProvider(dataView: dataView, reuseIdentifier: PersonCell.reuseIdentifier, indexPath: indexPath, registerCell: true) {
-        (cell: PersonCell) in // This is where type inference does its job
-        
-        cell.textLabel?.text = person.name
-        cell.detailTextLabel?.text = person.role
-      }
-    } else {
-      // Here, we use the cell registered in the storyboard
-      return DataCellProvider(dataView: dataView, reuseIdentifier: "SubtitleCell", indexPath: indexPath, registerCell: false) {
-        (cell: UITableViewCell) in
-        
-        cell.textLabel?.text = person.name
-        cell.detailTextLabel?.text = person.role
-      }
-    }
-  }
-  
+
+override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
+// Note: this is the ONLY time we have to implicitly unwrap
+return cellProvider(forRowAt: indexPath, in: tableView).cell as! UITableViewCell
+}
+
+func cellProvider<D : DataView>(forRowAt indexPath: NSIndexPath, in dataView: D) -> DataCellProvider {
+let person = people[indexPath.item]
+
+if person.role == "Engineer" {
+return DataCellProvider(dataView: dataView, reuseIdentifier: PersonCell.reuseIdentifier, indexPath: indexPath, registerCell: true) {
+(cell: PersonCell) in // This is where type inference does its job
+
+cell.textLabel?.text = person.name
+cell.detailTextLabel?.text = person.role
+}
+} else {
+// Here, we use the cell registered in the storyboard
+return DataCellProvider(dataView: dataView, reuseIdentifier: "SubtitleCell", indexPath: indexPath, registerCell: false) {
+(cell: UITableViewCell) in
+
+cell.textLabel?.text = person.name
+cell.detailTextLabel?.text = person.role
+}
+}
+}
+
 }
 ```
 

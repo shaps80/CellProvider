@@ -1,0 +1,16 @@
+PODS:
+  - CellProvider (1.0.0)
+
+DEPENDENCIES:
+  - CellProvider (from `../`)
+
+EXTERNAL SOURCES:
+  CellProvider:
+    :path: "../"
+
+SPEC CHECKSUMS:
+  CellProvider: ef74714579e4307862f92287485cdae173011504
+
+PODFILE CHECKSUM: 65f9c30e98e22da0ffc0c6a6f89b8207c05382c7
+
+COCOAPODS: 1.0.0
