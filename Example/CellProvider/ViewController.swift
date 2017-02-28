@@ -25,8 +25,6 @@ final class ViewController: UITableViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        let indexPath = IndexPath(row: 0, section: 0)
-        
         tableView.register(cellClass: PersonCell.self)
     }
     

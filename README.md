@@ -2,7 +2,7 @@
 
 [![Version](https://img.shields.io/cocoapods/v/CellProvider.svg?style=flat)](http://cocoapods.org/pods/CellProvider)
 [![License](https://img.shields.io/cocoapods/l/CellProvider.svg?style=flat)](http://cocoapods.org/pods/CellProvider)
-[![Language](https://img.shields.io/badge/language-swift_2.2-ff69b4.svg)](http://cocoadocs.org/docsets/CellProvider)
+[![Language](https://img.shields.io/badge/language-swift_3.0-ff69b4.svg)](http://cocoadocs.org/docsets/CellProvider)
 [![Platform](https://img.shields.io/cocoapods/p/CellProvider.svg?style=flat)](http://cocoapods.org/pods/CellProvider)
 
 <img src="Cells.png" width=375 />
@@ -15,7 +15,6 @@ My cell provider implementation ticks off the following:
 
 * Type-safe cell providers
 * Multiple cell types 
-* Composited approach (the cell code doesn't have to exist inside your VC)
 
 I actually wrote this code a long time ago for another library of mine, [Populate](http://github.com/shaps80/Populate).
 
@@ -24,52 +23,45 @@ Populate also includes a more consistent API for dealing with data in your table
 ## Example
 
 ```swift
-final class ViewController: UITableViewController, CellProviding {
-  
-  func cellProvider<D : DataView>(forRowAt indexPath: NSIndexPath, in dataView: D) -> CellProvider {
+// First register your cell
+tableView.register(cellClass: PersonCell.self)
+```
+
+```swift
+// Then dequeue with a type-safe function
+override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
     let person = people[indexPath.item]
     
     if person.role == "Engineer" {
-      return CellProvider(dataView: dataView, reuseIdentifier: PersonCell.reuseIdentifier, indexPath: indexPath, registerCell: true) {
-        (cell: PersonCell) in // This is where type inference does its job
-        
+        let cell = tableView.dequeueReusableCell(ofType: PersonCell.self, for: indexPath)
         cell.textLabel?.text = person.name
         cell.detailTextLabel?.text = person.role
-      }
+        return cell
     } else {
-      // Here, we use the cell registered in the storyboard
-      return CellProvider(dataView: dataView, reuseIdentifier: "SubtitleCell", indexPath: indexPath, registerCell: false) {
-        (cell: UITableViewCell) in
-        
+        let cell = tableView.dequeueReusableCell(with: "SubtitleCell", for: indexPath) as UITableViewCell
         cell.textLabel?.text = person.name
         cell.detailTextLabel?.text = person.role
-      }
+        return cell
     }
-  }
-  
 }
 ```
 
 ## Implementation
 
-The key to implementing multiple type-safe cell handling, is the `DataCellProvider`. This is a simple value-type that you instantiate with generics, fetch the cell and then trash. We don't need to keep it around, since its simply providing a nice wrapper around the cell construction and configuration.
-
-A class or struct can conform to `CellProviding`, which means this doesn't have to exist in your `UITableViewController`. In some of my projects, I've actually had a single file in my project that provides all the cells throughout my app. Your approach may differ but the composited, protocol-oriented approach I've chosen is quite flexible.
-
-As you can see from the example above, your `cellForRowAtIndexPath...`
+The key to implementing multiple type-safe cell handling, is the `ResuableView` and `ReusableViewHosting` protocol extensions. It automatically handles all the registration/dequeueing for you -- and all without stringly typed identifiers.
 
 ## Installation
 
 This repo includes a simple sample project for your convenience, however in order to use the code, you simply need to copy `CellProvider.swift` into your project. 
 
-Alternatively you can grab the code from GIST, [CellProvider.swift](https://gist.github.com/shaps80/eaa12e5fcddab90a4c6b2fbf321c96e6)
+Alternatively you can grab the code from GIST, [ReusableView.swift](https://gist.github.com/shaps80/eaa12e5fcddab90a4c6b2fbf321c96e6)
 
 ## Platforms and Versions
 
 The following platforms and version have been tested:
 
 * iOS 8.0 and greater
-* Swift 2.2
+* Swift 3.0
 
 ## Author
 
