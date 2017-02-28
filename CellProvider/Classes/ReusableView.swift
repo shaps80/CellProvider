@@ -30,6 +30,7 @@ extension UICollectionViewCell: ReusableCell { }
 public protocol ReusableCellHosting {
     func register<C: ReusableCell>(cellClass: C.Type)
     func dequeueReusableCell<C: ReusableCell>(ofType cellClass: C.Type, for indexPath: IndexPath) -> C
+    func dequeueReusableCell<C: ReusableCell>(with identifier: String, for indexPath: IndexPath) -> C
 }
 
 extension UITableView: ReusableCellHosting {
@@ -40,6 +41,10 @@ extension UITableView: ReusableCellHosting {
     
     public func dequeueReusableCell<C: ReusableCell>(ofType cellClass: C.Type, for indexPath: IndexPath) -> C {
         return dequeueReusableCell(withIdentifier: cellClass.reuseIdentifier, for: indexPath) as! C
+    }
+    
+    public func dequeueReusableCell<C : ReusableCell>(with identifier: String, for indexPath: IndexPath) -> C {
+        return dequeueReusableCell(withIdentifier: identifier, for: indexPath) as! C
     }
     
 }

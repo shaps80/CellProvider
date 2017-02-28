@@ -23,6 +23,12 @@ final class ViewController: UITableViewController {
         Person(name: "Anne", role: "Content Producer")
     ]
     
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        
+        tableView.register(cellClass: PersonCell.self)
+    }
+    
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return people.count
     }
@@ -36,7 +42,7 @@ final class ViewController: UITableViewController {
                 cell.detailTextLabel?.text = person.role
             }.cell
         } else {
-            return CellProvider(hostView: tableView, indexPath: indexPath) { (cell: UITableViewCell) in
+            return CellProvider(hostView: tableView, reuseIdentifier: "SubtitleCell", indexPath: indexPath) { (cell: UITableViewCell) in
                 cell.textLabel?.text = person.name
                 cell.detailTextLabel?.text = person.role
             }.cell

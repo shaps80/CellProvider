@@ -33,4 +33,10 @@ public struct CellProvider<C: ReusableCell, V: ReusableCellHosting> {
         self.cell = cell
     }
     
+    public init(hostView: V, reuseIdentifier: String, indexPath: IndexPath, configure: (C) -> Void) {
+        let cell = hostView.dequeueReusableCell(with: reuseIdentifier, for: indexPath) as C
+        configure(cell)
+        self.cell = cell
+    }
+    
 }
