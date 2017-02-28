@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name             = 'CellProvider'
-  s.version          = '2.0.0'
+  s.version          = '2.0.1'
   s.summary          = 'A generic cell provider implementation in Swift.'
   s.homepage         = 'https://github.com/shaps80/CellProvider'
   s.screenshots     = 'https://github.com/shaps80/CellProvider/blob/master/Cells.png?raw=true'
