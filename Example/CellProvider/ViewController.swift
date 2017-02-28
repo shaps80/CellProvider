@@ -10,47 +10,38 @@ import UIKit
 import CellProvider
 
 struct Person {
-  let name: String
-  let role: String
+    let name: String
+    let role: String
 }
 
 final class PersonCell: UITableViewCell { }
 
-final class ViewController: UITableViewController, CellProviding {
-  
-  let people = [
-    Person(name: "Shaps", role: "Engineer"),
-    Person(name: "Anne", role: "Content Producer")
-  ]
-  
-  override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-    return people.count
-  }
-  
-  override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-    return cellProvider(forRowAt: indexPath, in: tableView).cell as! UITableViewCell
-  }
-  
-  func cellProvider<D : DataView>(forRowAt indexPath: NSIndexPath, in dataView: D) -> CellProvider {
-    let person = people[indexPath.item]
+final class ViewController: UITableViewController {
     
-    if person.role == "Engineer" {
-      return CellProvider(dataView: dataView, reuseIdentifier: PersonCell.reuseIdentifier, indexPath: indexPath, registerCell: true) {
-        (cell: PersonCell) in // This is where type inference does its job
-        
-        cell.textLabel?.text = person.name
-        cell.detailTextLabel?.text = person.role
-      }
-    } else {
-      // Here, we use the cell registered in the storyboard
-      return CellProvider(dataView: dataView, reuseIdentifier: "SubtitleCell", indexPath: indexPath, registerCell: false) {
-        (cell: UITableViewCell) in
-        
-        cell.textLabel?.text = person.name
-        cell.detailTextLabel?.text = person.role
-      }
+    let people = [
+        Person(name: "Shaps", role: "Engineer"),
+        Person(name: "Anne", role: "Content Producer")
+    ]
+    
+    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return people.count
     }
-  }
-  
+    
+    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let person = people[indexPath.item]
+        
+        if person.role == "Engineer" {
+            return CellProvider(hostView: tableView, indexPath: indexPath) { (cell: PersonCell) in
+                cell.textLabel?.text = person.name
+                cell.detailTextLabel?.text = person.role
+            }.cell
+        } else {
+            return CellProvider(hostView: tableView, indexPath: indexPath) { (cell: UITableViewCell) in
+                cell.textLabel?.text = person.name
+                cell.detailTextLabel?.text = person.role
+            }.cell
+        }
+    }
+    
 }
 
