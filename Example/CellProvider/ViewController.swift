@@ -25,6 +25,7 @@ final class ViewController: UITableViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        let indexPath = IndexPath(row: 0, section: 0)
         
         tableView.register(cellClass: PersonCell.self)
     }
@@ -37,15 +38,15 @@ final class ViewController: UITableViewController {
         let person = people[indexPath.item]
         
         if person.role == "Engineer" {
-            return CellProvider(hostView: tableView, indexPath: indexPath) { (cell: PersonCell) in
-                cell.textLabel?.text = person.name
-                cell.detailTextLabel?.text = person.role
-            }.cell
+            let cell = tableView.dequeueReusableCell(ofType: PersonCell.self, for: indexPath)
+            cell.textLabel?.text = person.name
+            cell.detailTextLabel?.text = person.role
+            return cell
         } else {
-            return CellProvider(hostView: tableView, reuseIdentifier: "SubtitleCell", indexPath: indexPath) { (cell: UITableViewCell) in
-                cell.textLabel?.text = person.name
-                cell.detailTextLabel?.text = person.role
-            }.cell
+            let cell = tableView.dequeueReusableCell(with: "SubtitleCell", for: indexPath) as UITableViewCell
+            cell.textLabel?.text = person.name
+            cell.detailTextLabel?.text = person.role
+            return cell
         }
     }
     

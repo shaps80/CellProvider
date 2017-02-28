@@ -19,10 +19,8 @@ public struct CellProvider<C: ReusableCell, V: ReusableCellHosting> {
     /**
      Initializes this provider with the specified configuration
      
-     - parameter dataView:        The view that will host the cell
-     - parameter reuseIdentifier: The reuseIdentifier for the cell
+     - parameter hostView:        The view that will host the cell
      - parameter indexPath:       The indexPath where this cell will be presented
-     - parameter registerCell:    If true, calls dataView.registerClass... for you
      - parameter configuration:   A closure that allows the caller to configure the cell
      
      - returns: A new cell provider
@@ -33,6 +31,16 @@ public struct CellProvider<C: ReusableCell, V: ReusableCellHosting> {
         self.cell = cell
     }
     
+    /**
+     Initializes this provider with the specified configuration
+     
+     - parameter hostView:        The view that will host the cell
+     - parameter reuseIdentifier: The reuseIdentifier for the cell
+     - parameter indexPath:       The indexPath where this cell will be presented
+     - parameter configuration:   A closure that allows the caller to configure the cell
+     
+     - returns: A new cell provider
+     */
     public init(hostView: V, reuseIdentifier: String, indexPath: IndexPath, configure: (C) -> Void) {
         let cell = hostView.dequeueReusableCell(with: reuseIdentifier, for: indexPath) as C
         configure(cell)
